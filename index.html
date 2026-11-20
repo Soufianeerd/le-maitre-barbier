@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Le Maître Barbier — Proposition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<style>
+/* VOICE: direct, posé, entre deux pros qui se tutoient
+   IDEA: la carte de prestations d'un barber, avec son poteau rayé
+   PICTURE: bande du poteau de barbier + simulateur de gains en grand
+   COLOUR and TYPE: bordeaux profond, blanc, bleu acier ; Barlow Condensed + Barlow
+   LAYOUT: une colonne calme, pensée pour le téléphone, sections numérotées par leur titre */
+:root{color-scheme:light dark;
+ --bg:light-dark(#ffffff,#141012);--ink:light-dark(#1c1a1a,#f1ece9);--mute:light-dark(#5f5856,#b4aba7);
+ --line:light-dark(#e7e0dc,#33292b);--card:light-dark(#f7f3f1,#1e1719);--brand:#6e1826;
+ --acc:light-dark(#2c5f9e,#83b3ec);--ok:light-dark(#2c5f9e,#83b3ec)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16.5px/1.55 Barlow,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Barlow Condensed",Barlow,sans-serif;line-height:1.05;text-wrap:balance;margin:0}
+h1{font-size:clamp(34px,7vw,52px)}h2{font-size:clamp(28px,5vw,38px);margin-bottom:10px}h3{font-size:22px}
+p{margin:0 0 12px;max-width:66ch}
+a{color:var(--acc)}
+.wrap{max-width:760px;margin:0 auto}
+.band{padding:clamp(28px,5vw,56px) max(5vw,18px)}
+.band+.band{border-top:1px solid var(--line)}
+.pole{height:22px;background:repeating-linear-gradient(-45deg,#6e1826 0 14px,#fff 14px 28px,#2c5f9e 28px 42px,#fff 42px 56px);background-size:79px 22px;animation:slide 6s linear infinite}
+@keyframes slide{to{background-position:79px 0}}
+@media(prefers-reduced-motion:reduce){.pole{animation:none}}
+.hero{background:var(--brand);color:#fff}
+.hero .kick{font-weight:600;opacity:.85;margin-bottom:14px}
+.hero p{font-size:18px;opacity:.95;margin-top:16px}
+.who{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:22px;font-size:15px;opacity:.9}
+.who a{color:#fff}
+.lead{color:var(--mute)}
+.rows{list-style:none;padding:0;margin:18px 0 0}
+.rows li{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;padding:14px 0;border-top:1px solid var(--line)}
+.rows li:last-child{border-bottom:1px solid var(--line)}
+.rows b{font-size:17.5px}.rows span{color:var(--mute)}
+.note{font-size:14px;color:var(--mute)}
+.ctl{display:grid;gap:16px;margin:20px 0}
+.ctl label{display:grid;gap:4px;font-weight:500}
+.ctl .top{display:flex;justify-content:space-between;gap:10px}
+.ctl output{font-weight:600;white-space:nowrap;color:var(--acc)}
+input[type=range]{width:100%;height:32px;accent-color:#6e1826}
+.big{background:var(--card);border-radius:10px;padding:18px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.big div{display:grid}.big small{color:var(--mute);font-size:14px}
+.big strong{font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,8vw,44px);line-height:1;white-space:nowrap}
+.bars{margin:20px 0 6px;display:grid;gap:12px}
+.bar .lab{display:flex;justify-content:space-between;gap:10px;font-size:15px}
+.bar .lab b{white-space:nowrap}
+.track{height:14px;background:var(--line);border-radius:7px;overflow:hidden;margin-top:4px}
+.fill{height:100%;background:#6e1826;border-radius:7px;transition:width .3s}
+.fill.t{background:var(--acc)}
+table{width:100%;border-collapse:collapse;margin-top:18px;font-size:15px}
+th,td{text-align:start;padding:9px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--mute);font-weight:600}
+td.n,th.n{text-align:end;white-space:nowrap}
+.q{padding:18px 0;border-top:1px solid var(--line)}
+.q h3{font-size:21px;margin-bottom:4px}
+.q .hint{font-size:14px;color:var(--mute);margin-bottom:10px}
+.opt{display:flex;align-items:center;gap:12px;min-height:46px;padding:8px 12px;margin:6px 0;border:1px solid var(--line);border-radius:8px;cursor:pointer;background:var(--bg)}
+.opt input{width:20px;height:20px;accent-color:#6e1826;flex:none;margin:0}
+.opt:has(input:checked){border-color:#6e1826;background:var(--card)}
+.other{display:none;margin:6px 0 0}
+.other.on{display:block}
+input[type=text],textarea{width:100%;font:inherit;font-size:16px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:11px 12px}
+textarea{min-height:110px;resize:vertical}
+:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.prog{position:sticky;top:0;z-index:2;background:var(--bg);padding:10px 0;border-bottom:1px solid var(--line);font-size:14px;color:var(--mute)}
+.prog .track{height:6px;margin-top:6px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:12px 18px;border-radius:9px;border:0;font:600 17px Barlow,sans-serif;text-decoration:none;cursor:pointer;width:100%}
+.btn.main{background:#1f7a4d;color:#fff}
+.btn.sec{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.btn.go{background:#6e1826;color:#fff;margin-top:22px}
+.send{display:none;margin-top:22px;gap:10px}
+.send.on{display:grid}
+pre{white-space:pre-wrap;background:var(--card);border-radius:8px;padding:14px;font:14px/1.5 Barlow,sans-serif;max-height:260px;overflow:auto;margin:0}
+.msg{font-size:15px;min-height:22px;color:var(--ok)}
+footer{font-size:14px;color:var(--mute)}
+@media(max-width:600px){table{font-size:13.5px}.stack thead{display:none}.stack tr{display:grid;padding-block:8px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:2px 0;padding-inline-start:7.5em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7em;margin-inline-start:-7.5em;color:var(--mute)}.stack td.n{text-align:start}}
+</style>
+</head>
+<body>
+<div class="pole" aria-hidden="true"></div>
+<header class="band hero"><div class="wrap">
+ <div class="kick">Le Maître Barbier · Proposition de collaboration</div>
+ <h1>Suivre tous tes salons depuis ton téléphone, en gardant Planity</h1>
+ <p>Suite à notre échange, voici ce que je fais, ce que je peux mettre en place chez toi et ce que ça peut te rapporter. À la fin, un petit questionnaire de 2 minutes pour que je parte de tes vrais besoins.</p>
+ <div class="who"><span>Soufiane El Rhadi</span><span>Digitalisation · Web · Outils métier · Automatisation</span><a href="https://soufianeerd.netlify.app">soufianeerd.netlify.app</a></div>
+</div></header>
+
+<section class="band"><div class="wrap">
+ <h2>Ce que je fais</h2>
+ <p class="lead">Je développe des outils sur mesure pour les entreprises de la région, entre la Lorraine et le Luxembourg : applications web, tableaux de bord, automatisations et intelligence artificielle. Je pars toujours des outils que tu utilises déjà, je ne te fais pas tout changer.</p>
+</div></section>
+
+<section class="band"><div class="wrap">
+ <h2>Ce que je peux mettre en place chez toi</h2>
+ <ul class="rows">
+  <li><b>Un tableau de bord pour tous tes salons</b><span>Chiffre du jour, remplissage, ce que fait chaque barbier, dépenses et ce qu'il reste vraiment, salon par salon.</span></li>
+  <li><b>Des réponses automatiques</b><span>Messages WhatsApp et Instagram, appels manqués pendant une coupe : le client reçoit les horaires, les prix et le lien de réservation.</span></li>
+  <li><b>Plus d'avis Google</b><span>Une demande d'avis envoyée après chaque passage, des réponses préparées et une alerte si un avis est négatif.</span></li>
+  <li><b>La relance et la fidélité des clients</b><span>Le client qui revient d'habitude toutes les 3 semaines et qui n'a pas repris rendez-vous reçoit un rappel au bon moment.</span></li>
+  <li><b>La gestion de l'équipe</b><span>Commissions calculées automatiquement, plannings, suivi des produits et des commandes.</span></li>
+  <li><b>Un site et un Planity cohérents</b><span>Les mêmes prix, les mêmes prestations et le même lien de réservation partout, pour chaque salon.</span></li>
+ </ul>
+ <p class="note" style="margin-top:12px">Planity reste ton outil de réservation. Tout ce qui est au-dessus vient s'y ajouter.</p>
+</div></section>
+
+<section class="band" id="gains"><div class="wrap">
+ <h2>Ce que ça peut te rapporter</h2>
+ <p class="lead">Bouge les curseurs avec tes chiffres. C'est une estimation, pas une promesse : on la vérifie ensemble sur tes vraies données.</p>
+ <div class="big" aria-live="polite">
+  <div><small>En plus par mois</small><strong id="kMonth">—</strong></div>
+  <div><small>En plus sur un an</small><strong id="kYear">—</strong></div>
+  <div><small>Temps récupéré par mois</small><strong id="kTime">—</strong></div>
+  <div><small>Clients en plus par mois</small><strong id="kCli">—</strong></div>
+ </div>
+ <div class="bars" id="bars"></div>
+ <div class="ctl" id="ctl"></div>
+ <table class="stack"><thead><tr><th>Levier</th><th>Hypothèse</th><th class="n">Par mois</th><th class="n">Par an</th></tr></thead><tbody id="tb"></tbody></table>
+ <p class="note" style="margin-top:12px">Calcul sur 26 jours d'ouverture par mois. Le chiffre d'affaires en plus n'est pas du bénéfice net, et il suppose des créneaux libres pour accueillir ces clients.</p>
+</div></section>
+
+<section class="band" id="questionnaire"><div class="wrap">
+ <h2>Tes besoins en 2 minutes</h2>
+ <p class="lead">Coche ce qui te correspond, plusieurs réponses possibles quand c'est indiqué. Si rien ne colle, choisis « Autre » et écris ta réponse.</p>
+ <div class="prog"><span id="pTxt">0 sur 9 questions</span><div class="track"><div class="fill t" id="pBar" style="width:0"></div></div></div>
+ <form id="form" novalidate>
+  <div id="qs"></div>
+  <div class="q"><h3>Tes remarques</h3><div class="hint">Une difficulté, une idée, une question : écris librement.</div><textarea id="rem" placeholder="Ce que tu veux me dire…"></textarea></div>
+  <div class="q"><h3>Ton prénom ou ton salon</h3><input type="text" id="nom" autocomplete="name" placeholder="Facultatif"></div>
+  <button type="submit" class="btn go">Terminer et m'envoyer tes réponses</button>
+ </form>
+ <div class="send" id="send">
+  <h3>Plus qu'une étape</h3>
+  <p style="margin:0">Appuie sur WhatsApp : le message s'ouvre déjà rempli, il te reste à appuyer sur Envoyer.</p>
+  <a class="btn main" id="wa" href="#">Envoyer sur WhatsApp</a>
+  <a class="btn sec" id="mail" href="#">Envoyer par e-mail</a>
+  <button type="button" class="btn sec" id="copy">Copier mes réponses</button>
+  <div class="msg" id="msg" role="status"></div>
+  <pre id="sum"></pre>
+ </div>
+</div></section>
+
+<footer class="band"><div class="wrap">
+ <p>Soufiane El Rhadi · Développeur indépendant · Metz, Lorraine et Luxembourg<br><a href="https://soufianeerd.netlify.app">soufianeerd.netlify.app</a><span id="ctc"></span></p>
+</div></footer>
+
+<script>
+{
+/* Coordonnées : remplir pour que WhatsApp et l'e-mail arrivent directement chez moi */
+const PHONE = "";   /* format international sans + ni espaces, ex. 33612345678 */
+const EMAIL = "";
+
+const eur = v => Math.round(v).toLocaleString("fr-FR") + " €";
+const S = [
+ {id:"s",lab:"Nombre de salons",min:1,max:6,step:1,v:3,f:v=>v},
+ {id:"e",lab:"Clients en plus par jour et par salon",min:0,max:5,step:0.5,v:1,f:v=>String(v).replace(".",",")},
+ {id:"p",lab:"Ticket moyen",min:10,max:35,step:1,v:18,f:v=>v+" €"},
+ {id:"r",lab:"Clients relancés qui reviennent, par mois et par salon",min:0,max:40,step:1,v:10,f:v=>v},
+ {id:"h",lab:"Heures d'administratif économisées par semaine et par salon",min:0,max:8,step:0.5,v:2,f:v=>String(v).replace(".",",")+" h"}
+];
+const ctl = document.getElementById("ctl");
+ctl.innerHTML = S.map(s=>`<label for="r_${s.id}"><span class="top"><span>${s.lab}</span><output id="o_${s.id}"></output></span><input type="range" id="r_${s.id}" min="${s.min}" max="${s.max}" step="${s.step}" value="${s.v}"></label>`).join("");
+const val = id => Number(document.getElementById("r_"+id).value);
+let calc = {};
+function draw(){
+ S.forEach(s=>document.getElementById("o_"+s.id).textContent=s.f(val(s.id)));
+ const s=val("s"),e=val("e"),p=val("p"),r=val("r"),h=val("h");
+ const resa=s*e*p*26, fid=s*r*p, hrs=h*s*52/12, cli=s*e*26+s*r;
+ calc={s,e,p,r,h,resa,fid,hrs,tot:resa+fid};
+ document.getElementById("kMonth").textContent=eur(resa+fid);
+ document.getElementById("kYear").textContent=eur((resa+fid)*12);
+ document.getElementById("kTime").textContent=Math.round(hrs)+" h";
+ document.getElementById("kCli").textContent=Math.round(cli);
+ const max=Math.max(resa,fid,1);
+ const L=[["Clients en plus (messages, appels, sans RDV)",resa,""],["Clients relancés qui reviennent",fid,""]];
+ document.getElementById("bars").innerHTML=L.map(l=>`<div class="bar"><div class="lab"><span>${l[0]}</span><b>${eur(l[1])} / mois</b></div><div class="track"><div class="fill" style="width:${(l[1]/max*100).toFixed(1)}%"></div></div></div>`).join("")
+  +`<div class="bar"><div class="lab"><span>Temps d'administratif récupéré</span><b>${Math.round(hrs)} h / mois</b></div><div class="track"><div class="fill t" style="width:${Math.min(100,hrs/Math.max(hrs,40)*100).toFixed(1)}%"></div></div></div>`;
+ const T=[
+  ["Clients en plus",`${String(e).replace(".",",")} par jour × ${s} salon${s>1?"s":""} × ${p} €`,eur(resa),eur(resa*12)],
+  ["Relance et fidélité",`${r} retours × ${s} salon${s>1?"s":""} × ${p} €`,eur(fid),eur(fid*12)],
+  ["Temps récupéré",`${String(h).replace(".",",")} h par semaine × ${s} salon${s>1?"s":""}`,Math.round(hrs)+" h",Math.round(hrs*12)+" h"],
+  ["Total chiffre d'affaires","",eur(resa+fid),eur((resa+fid)*12)]];
+ document.getElementById("tb").innerHTML=T.map((t,i)=>`<tr${i==3?' style="font-weight:600"':""}><td>${t[0]}</td><td>${t[1]}</td><td class="n">${t[2]}</td><td class="n">${t[3]}</td></tr>`).join("");
+ build();
+}
+ctl.addEventListener("input",draw);
+
+const Q=[
+ {q:"Combien de salons gères-tu aujourd'hui ?",m:0,o:["1","2","3","4 ou plus"]},
+ {q:"Combien de personnes travaillent dans tes salons, au total ?",m:0,o:["1 à 3","4 à 6","7 à 10","Plus de 10"]},
+ {q:"En dehors des coupes, qu'est-ce qui te prend le plus de temps ?",m:1,o:["Répondre au téléphone et aux messages","Faire les plannings","Suivre la caisse, les espèces et les dépenses","Calculer les paies ou les commissions","Commander les produits","Publier sur les réseaux","Recruter"]},
+ {q:"Qu'est-ce qui te fait perdre des clients ou de l'argent ?",m:1,o:["Rendez-vous non honorés","Appels manqués pendant une coupe","Clients sans rendez-vous qui repartent","Créneaux vides certains jours","Clients qui ne reviennent pas","Un salon moins connu que les autres","Je ne sais pas exactement"]},
+ {q:"Comment suis-tu les chiffres de chaque salon ?",m:0,o:["Avec les statistiques Planity","Cahier ou fichier Excel","Mon comptable s'en occupe","Je fais le point à la caisse le soir","Je n'ai pas de vrai suivi"]},
+ {q:"Comment tes clients prennent-ils rendez-vous ?",m:1,o:["Planity","Téléphone","WhatsApp ou Instagram","Sans rendez-vous, en passant"]},
+ {q:"Qu'aimerais-tu voir chaque matin sur ton téléphone ?",m:1,o:["Le chiffre de chaque salon","Le taux de remplissage","Ce que fait chaque barbier","Les dépenses et ce qu'il reste vraiment","Les nouveaux avis clients","Des alertes (salon calme, stock bas)"]},
+ {q:"Quelles solutions t'intéressent le plus ?",m:1,o:["Tableau de bord pour tous les salons","Réponses automatiques aux messages et appels","Plus d'avis Google","Relance et fidélité des clients","Site internet et réseaux sociaux","Gestion de l'équipe et des commissions","Suivi des stocks"]},
+ {q:"Comment préfères-tu avancer ?",m:0,o:["Tester d'abord sur un seul salon","Mettre en place sur tous les salons","Commencer dès que possible","En reparler de vive voix avant"]}
+];
+const esc = t => t.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+document.getElementById("qs").innerHTML=Q.map((x,i)=>{
+ const t=x.m?"checkbox":"radio", opts=[...x.o,"Autre"];
+ return `<fieldset class="q" style="border:0;margin:0;padding-inline:0"><legend><h3>${i+1}. ${esc(x.q)}</h3></legend><div class="hint">${x.m?"Plusieurs réponses possibles":"Une seule réponse"}</div>`+
+  opts.map((o,j)=>`<label class="opt"><input type="${t}" name="q${i}" value="${esc(o)}" ${j==opts.length-1?'data-autre="1"':""}><span>${esc(o)}</span></label>`).join("")+
+  `<div class="other" id="ot${i}"><input type="text" id="ox${i}" placeholder="Précise ta réponse" aria-label="Autre réponse, question ${i+1}"></div></fieldset>`;
+}).join("");
+
+const form=document.getElementById("form");
+function answers(){
+ return Q.map((x,i)=>{
+  const c=[...form.querySelectorAll(`input[name=q${i}]:checked`)].map(n=>n.dataset.autre?"Autre : "+(document.getElementById("ox"+i).value.trim()||"(non précisé)"):n.value);
+  return c;
+ });
+}
+function build(){
+ const a=answers(), nom=document.getElementById("nom").value.trim(), rem=document.getElementById("rem").value.trim();
+ const done=a.filter(x=>x.length).length;
+ document.getElementById("pTxt").textContent=done+" sur 9 questions";
+ document.getElementById("pBar").style.width=(done/9*100)+"%";
+ let t="Questionnaire Le Maître Barbier\n"+(nom?"De : "+nom+"\n":"")+"\n";
+ Q.forEach((x,i)=>{t+=(i+1)+". "+x.q+"\n→ "+(a[i].length?a[i].join(" ; "):"sans réponse")+"\n\n"});
+ if(rem) t+="Remarques : "+rem+"\n\n";
+ if(calc.s) t+=`Estimation consultée : ${calc.s} salon(s), ${String(calc.e).replace(".",",")} client(s) en plus par jour, ticket ${calc.p} €, ${calc.r} retours par mois → ${eur(calc.tot)} par mois, ${Math.round(calc.hrs)} h récupérées.`;
+ document.getElementById("sum").textContent=t;
+ document.getElementById("wa").href="https://wa.me/"+PHONE+"?text="+encodeURIComponent(t);
+ document.getElementById("mail").href="mailto:"+EMAIL+"?subject="+encodeURIComponent("Questionnaire Le Maître Barbier")+"&body="+encodeURIComponent(t);
+ try{localStorage.setItem("lmb-draft",JSON.stringify({a:[...form.querySelectorAll("input:checked")].map(n=>n.name+"|"+n.value),o:Q.map((x,i)=>document.getElementById("ox"+i).value),rem,nom}))}catch(e){}
+ return t;
+}
+form.addEventListener("change",e=>{
+ const n=e.target;
+ if(n.name&&n.name.startsWith("q")){const i=n.name.slice(1),box=document.getElementById("ot"+i);
+  const on=!!form.querySelector(`input[name=q${i}][data-autre]:checked`);box.classList.toggle("on",on);
+  if(on&&n.dataset.autre)document.getElementById("ox"+i).focus();}
+ build();
+});
+form.addEventListener("input",build);
+form.addEventListener("submit",e=>{e.preventDefault();build();const s=document.getElementById("send");s.classList.add("on");s.scrollIntoView({behavior:"smooth",block:"start"})});
+document.getElementById("copy").addEventListener("click",()=>{
+ const t=build(),m=document.getElementById("msg");
+ navigator.clipboard.writeText(t).then(()=>{m.textContent="Réponses copiées. Colle-les dans un message pour me les envoyer."})
+ .catch(()=>{const r=document.createRange();r.selectNodeContents(document.getElementById("sum"));const s=getSelection();s.removeAllRanges();s.addRange(r);m.textContent="Le texte est sélectionné : copie-le puis colle-le dans un message."});
+});
+if(PHONE||EMAIL) document.getElementById("ctc").textContent=" · "+[PHONE&&("+"+PHONE),EMAIL].filter(Boolean).join(" · ");
+
+try{const d=JSON.parse(localStorage.getItem("lmb-draft")||"null");
+ if(d){d.a.forEach(k=>{const[nm,v]=k.split("|");const el=[...form.querySelectorAll(`input[name=${nm}]`)].find(x=>x.value===v);if(el)el.checked=true});
+  d.o.forEach((v,i)=>{document.getElementById("ox"+i).value=v||"";if(form.querySelector(`input[name=q${i}][data-autre]:checked`))document.getElementById("ot"+i).classList.add("on")});
+  document.getElementById("rem").value=d.rem||"";document.getElementById("nom").value=d.nom||"";}}catch(e){}
+draw();
+}
+</script>
+</body>
+</html>
